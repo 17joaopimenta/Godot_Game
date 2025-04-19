@@ -1,0 +1,255 @@
+[gd_scene load_steps=27 format=3 uid="uid://b40o7sq0vftwc"]
+
+[ext_resource type="Texture2D" uid="uid://duewehnmiovxv" path="res://Assets/Characters/Player/spritesheets/player-idle.png" id="1_0e48y"]
+[ext_resource type="Script" uid="uid://b2vaqst4oq8yj" path="res://Joojinho.gd" id="1_0h7mo"]
+[ext_resource type="Texture2D" uid="uid://duk0iecdnto4l" path="res://Assets/Previews/super-grotto.png" id="1_kdubu"]
+[ext_resource type="Texture2D" uid="uid://cncychxfwt3k2" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot1.png" id="3_d2bti"]
+[ext_resource type="Texture2D" uid="uid://6f6ehgbrglaf" path="res://Assets/Characters/Player/sprites/Player-jump/player-jump2.png" id="3_ta5nu"]
+[ext_resource type="Texture2D" uid="uid://djgf1ea4eh77f" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot2.png" id="4_ta5nu"]
+[ext_resource type="Texture2D" uid="uid://274wwcuq162" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot3.png" id="5_flf07"]
+[ext_resource type="Texture2D" uid="uid://hkvqjnihvcic" path="res://Assets/Characters/Player/sprites/player-run/player-run1.png" id="6_k73cj"]
+[ext_resource type="Texture2D" uid="uid://dd7q6apd671rd" path="res://Assets/Characters/Player/sprites/player-run/player-run2.png" id="7_rjqkl"]
+[ext_resource type="Texture2D" uid="uid://c1ft33kbqurbb" path="res://Assets/Characters/Player/sprites/Player-jump/player-jump1.png" id="8_flf07"]
+[ext_resource type="Texture2D" uid="uid://ck552xkqklkdk" path="res://Assets/Characters/Player/sprites/player-run/player-run3.png" id="8_fs4d3"]
+[ext_resource type="Texture2D" uid="uid://cgb0g8xllnt03" path="res://Assets/Characters/Player/sprites/player-run/player-run4.png" id="9_7vxoj"]
+[ext_resource type="Texture2D" uid="uid://dfekgidcx85xu" path="res://Assets/Characters/Player/sprites/player-run/player-run5.png" id="10_ei405"]
+[ext_resource type="Texture2D" uid="uid://g3ykuerdfm2u" path="res://Assets/Characters/Player/sprites/player-run/player-run6.png" id="11_e8dv2"]
+[ext_resource type="PackedScene" uid="uid://dwvknujoemmpp" path="res://Enemy.tscn" id="12_x0ka3"]
+
+[sub_resource type="GDScript" id="GDScript_0e48y"]
+resource_name = "Player"
+script/source = "extends CharacterBody2D
+
+enum {
+	WALK,
+	IDLE,
+	JUMP
+}
+
+const SPEED = 300.0
+const JUMP_VELOCITY = -200.0
+
+@onready var bala = preload(\"res://Bullet.tscn\")
+
+var balaDir = 1
+var atirando = false
+
+var life := 5
+
+func _physics_process(delta: float) -> void:
+	# Add the gravity.
+	
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+		#$AnimatedSprite2D.play(\"EndJump\")
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		#$AnimatedSprite2D.play(\"StartJump\")
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
+	
+	if !atirando:
+		if direction:
+			$AnimatedSprite2D.play(\"Walk\")
+			balaDir = direction
+			velocity.x = direction * SPEED
+		else:
+			$AnimatedSprite2D.play(\"Idle\")
+			velocity.x = 0
+	else:
+		velocity.x = 0
+	
+	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+		atirando = true
+		$AnimatedSprite2D.play(\"Shoot\")
+	
+	if direction > 0:
+		$AnimatedSprite2D.flip_h = false
+	elif direction < 0:
+		$AnimatedSprite2D.flip_h = true
+
+	move_and_slide()
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"Inimigo\"):
+		get_tree().change_scene_to_file(\"res://derrota.tscn\")
+
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	if atirando:
+		var tiro = bala.instantiate()
+		tiro.dir = balaDir
+		tiro.global_position = global_position
+		get_parent().add_child(tiro)
+		atirando = false
+		
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epypp"]
+size = Vector2(17, 33)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hol4"]
+size = Vector2(23, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_epypp"]
+atlas = ExtResource("1_0e48y")
+region = Rect2(0, 0, 32, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hol4"]
+atlas = ExtResource("1_0e48y")
+region = Rect2(32, 0, 32, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q6r6c"]
+atlas = ExtResource("1_0e48y")
+region = Rect2(64, 0, 32, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdubu"]
+atlas = ExtResource("1_0e48y")
+region = Rect2(96, 0, 32, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d21ai"]
+atlas = ExtResource("1_0e48y")
+region = Rect2(128, 0, 32, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rj586"]
+atlas = ExtResource("1_0e48y")
+region = Rect2(160, 0, 32, 38)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4d7sh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ta5nu")
+}],
+"loop": true,
+"name": &"EndJump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_epypp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hol4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q6r6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdubu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d21ai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rj586")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_d2bti")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ta5nu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_flf07")
+}],
+"loop": false,
+"name": &"Shoot",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_flf07")
+}],
+"loop": true,
+"name": &"StartJump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_k73cj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_rjqkl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_fs4d3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_7vxoj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ei405")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_e8dv2")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 6.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wtcfe"]
+size = Vector2(1154, 20)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_0h7mo")
+
+[node name="Super-grotto" type="Sprite2D" parent="."]
+position = Vector2(520, 560)
+texture = ExtResource("1_kdubu")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(113, 569)
+script = SubResource("GDScript_0e48y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(-0.5, 3.5)
+shape = SubResource("RectangleShape2D_epypp")
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
+position = Vector2(-0.5, 3)
+shape = SubResource("RectangleShape2D_0hol4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+position = Vector2(-2, 1)
+sprite_frames = SubResource("SpriteFrames_4d7sh")
+animation = &"EndJump"
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+zoom = Vector2(2.7, 2.7)
+limit_left = 0
+limit_top = 440
+limit_right = 1040
+limit_bottom = 680
+editor_draw_limits = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(579, 660)
+shape = SubResource("RectangleShape2D_wtcfe")
+
+[node name="Inimigo" parent="." instance=ExtResource("12_x0ka3")]
+position = Vector2(1097, 562)
+
+[node name="Inimigo2" parent="." instance=ExtResource("12_x0ka3")]
+position = Vector2(960, 588)
+
+[node name="Inimigo3" parent="." instance=ExtResource("12_x0ka3")]
+position = Vector2(848, 568)
+
+[connection signal="body_entered" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_body_entered"]
+[connection signal="animation_finished" from="CharacterBody2D/AnimatedSprite2D" to="CharacterBody2D" method="_on_animated_sprite_2d_animation_finished"]
