@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://b40o7sq0vftwc"]
+[gd_scene load_steps=28 format=3 uid="uid://b40o7sq0vftwc"]
 
 [ext_resource type="Texture2D" uid="uid://duewehnmiovxv" path="res://Assets/Characters/Player/spritesheets/player-idle.png" id="1_0e48y"]
 [ext_resource type="Script" uid="uid://b2vaqst4oq8yj" path="res://Joojinho.gd" id="1_0h7mo"]
@@ -21,58 +21,67 @@ resource_name = "Player"
 script/source = "extends CharacterBody2D
 
 enum {
-	WALK,
 	IDLE,
-	JUMP
+	WALK,
+	JUMP,
+	FALL,
+	SHOOT
 }
+@onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -200.0
+
+const SPEED = 600.0
+const JUMP_VELOCITY = -500.0
 
 @onready var bala = preload(\"res://Bullet.tscn\")
 
 var balaDir = 1
 var atirando = false
 
+var direction = 0
+
 var life := 5
 
+var estadoAtual = 0
+var inicio_estado = false
+
+var ani_fim := false
+
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+	print(velocity.y)
+	match estadoAtual:
+		IDLE:
+			estado_idle(delta)
+		WALK:
+			estado_walk(delta)
+		JUMP:
+			estado_jump(delta)
+		FALL:
+			estado_fall(delta)
+		SHOOT:
+			estado_shoot(delta)
 	
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-		#$AnimatedSprite2D.play(\"EndJump\")
+	#if not is_on_floor():
+		#velocity += get_gravity() * delta
+		##$AnimatedSprite2D.play(\"EndJump\")
+#
+	## Handle jump.
+	#if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		##$AnimatedSprite2D.play(\"StartJump\")
+		#velocity.y = JUMP_VELOCITY
+#
+	## Get the input direction and handle the movement/deceleration.
+	## As good practice, you should replace UI actions with custom gameplay actions.
+	#var direction := Input.get_axis(\"ui_left\", \"ui_right\")
+	#
+	#
+	#if Input.is_action_just_pressed(\"tiro\") and !atirando:
+		#atirando = true
+		#$AnimatedSprite2D.play(\"Shoot\")
+	#
+#
+	#move_and_slide()
 
-	# Handle jump.
-	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
-		#$AnimatedSprite2D.play(\"StartJump\")
-		velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
-	
-	if !atirando:
-		if direction:
-			$AnimatedSprite2D.play(\"Walk\")
-			balaDir = direction
-			velocity.x = direction * SPEED
-		else:
-			$AnimatedSprite2D.play(\"Idle\")
-			velocity.x = 0
-	else:
-		velocity.x = 0
-	
-	if Input.is_action_just_pressed(\"tiro\") and !atirando:
-		atirando = true
-		$AnimatedSprite2D.play(\"Shoot\")
-	
-	if direction > 0:
-		$AnimatedSprite2D.flip_h = false
-	elif direction < 0:
-		$AnimatedSprite2D.flip_h = true
-
-	move_and_slide()
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -81,13 +90,93 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 
 func _on_animated_sprite_2d_animation_finished() -> void:
+	ani_fim = true
 	if atirando:
+		atirando = false
 		var tiro = bala.instantiate()
 		tiro.dir = balaDir
 		tiro.global_position = global_position
 		get_parent().add_child(tiro)
-		atirando = false
 		
+func estado_idle(delta):
+	anim.play(\"Idle\")
+	move(0,true,delta)
+	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+		troca_estado(SHOOT)
+	if direction != 0:
+		troca_estado(WALK)
+	elif Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		troca_estado(JUMP)
+
+func estado_walk(delta):
+	anim.play(\"Walk\")
+	move(300,true,delta)
+	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+		troca_estado(SHOOT)
+	elif !direction:
+		troca_estado(IDLE)
+	elif Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		troca_estado(JUMP)
+
+func estado_jump(delta):
+	anim.play(\"Jump\")
+	move(300,true,delta)
+	if inicio_estado:
+		velocity.y = JUMP_VELOCITY
+		inicio_estado = false
+	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+		troca_estado(SHOOT)
+	elif velocity.y > 0 and !is_on_floor():
+		troca_estado(FALL)
+
+func estado_fall(delta):
+	anim.play(\"Fall\")
+	move(300,true,delta)
+	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+		troca_estado(SHOOT)
+	elif  is_on_floor():
+		if direction:
+			troca_estado(WALK)
+		else:
+			troca_estado(IDLE)
+
+func estado_shoot(delta):
+	if inicio_estado:
+		anim.play(\"Shoot\")
+		balaDir = 1 if anim.flip_h == false else -1
+		atirando = true
+		inicio_estado = false
+	if ani_fim:
+		if !is_on_floor():
+			troca_estado(FALL)
+		elif Input.is_action_just_pressed(\"ui_accept\"):
+			troca_estado(JUMP)
+		elif direction:
+			troca_estado(WALK)
+		else:
+			troca_estado(IDLE)
+
+func troca_estado(novo_estado)->void:
+	if estadoAtual != novo_estado:
+		estadoAtual = novo_estado
+	inicio_estado = true
+	ani_fim = false
+
+func move(vel,can_fall,delta):
+	if not is_on_floor() and can_fall:
+		velocity += get_gravity() * delta
+	direction = Input.get_axis(\"ui_left\", \"ui_right\")
+
+	if direction:
+		#balaDir = direction
+		velocity.x = direction * vel
+	else:
+		velocity.x = 0
+	if direction > 0:
+		anim.flip_h = false
+	elif direction < 0:
+		anim.flip_h = true	
+	move_and_slide()
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epypp"]
@@ -127,7 +216,7 @@ animations = [{
 "texture": ExtResource("3_ta5nu")
 }],
 "loop": true,
-"name": &"EndJump",
+"name": &"Fall",
 "speed": 5.0
 }, {
 "frames": [{
@@ -155,6 +244,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("8_flf07")
+}],
+"loop": true,
+"name": &"Jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("3_d2bti")
 }, {
 "duration": 1.0,
@@ -166,14 +263,6 @@ animations = [{
 "loop": false,
 "name": &"Shoot",
 "speed": 8.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("8_flf07")
-}],
-"loop": true,
-"name": &"StartJump",
-"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -202,33 +291,37 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wtcfe"]
 size = Vector2(1154, 20)
 
-[node name="Game" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d2bti"]
+size = Vector2(20, 182)
+
+[node name="Game" type="Node2D" node_paths=PackedStringArray("player")]
 script = ExtResource("1_0h7mo")
+player = NodePath("Player")
 
 [node name="Super-grotto" type="Sprite2D" parent="."]
 position = Vector2(520, 560)
 texture = ExtResource("1_kdubu")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+[node name="Player" type="CharacterBody2D" parent="." groups=["Player"]]
 position = Vector2(113, 569)
 script = SubResource("GDScript_0e48y")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 position = Vector2(-0.5, 3.5)
 shape = SubResource("RectangleShape2D_epypp")
 
-[node name="Area2D" type="Area2D" parent="CharacterBody2D"]
+[node name="Area2D" type="Area2D" parent="Player"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Area2D"]
 position = Vector2(-0.5, 3)
 shape = SubResource("RectangleShape2D_0hol4")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
 position = Vector2(-2, 1)
 sprite_frames = SubResource("SpriteFrames_4d7sh")
-animation = &"EndJump"
+animation = &"Fall"
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+[node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(2.7, 2.7)
 limit_left = 0
 limit_top = 440
@@ -242,14 +335,15 @@ editor_draw_limits = true
 position = Vector2(579, 660)
 shape = SubResource("RectangleShape2D_wtcfe")
 
-[node name="Inimigo" parent="." instance=ExtResource("12_x0ka3")]
-position = Vector2(1097, 562)
-
-[node name="Inimigo2" parent="." instance=ExtResource("12_x0ka3")]
-position = Vector2(960, 588)
-
 [node name="Inimigo3" parent="." instance=ExtResource("12_x0ka3")]
-position = Vector2(848, 568)
+position = Vector2(391, 563)
 
-[connection signal="body_entered" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_body_entered"]
-[connection signal="animation_finished" from="CharacterBody2D/AnimatedSprite2D" to="CharacterBody2D" method="_on_animated_sprite_2d_animation_finished"]
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+position = Vector2(11, 607)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+position = Vector2(0, -50)
+shape = SubResource("RectangleShape2D_d2bti")
+
+[connection signal="body_entered" from="Player/Area2D" to="Player" method="_on_area_2d_body_entered"]
+[connection signal="animation_finished" from="Player/AnimatedSprite2D" to="Player" method="_on_animated_sprite_2d_animation_finished"]

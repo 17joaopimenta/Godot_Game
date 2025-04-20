@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dwvknujoemmpp"]
+[gd_scene load_steps=8 format=3 uid="uid://dwvknujoemmpp"]
 
 [ext_resource type="Texture2D" uid="uid://2xsce6b3bssv" path="res://Assets/Characters/Enemies/Crab/Sprites/Walk/crab-walk1.png" id="1_e6d4v"]
 [ext_resource type="Texture2D" uid="uid://yfduta6fwvl5" path="res://Assets/Characters/Enemies/Crab/Sprites/Walk/crab-walk2.png" id="2_qp131"]
@@ -8,63 +8,35 @@
 [sub_resource type="GDScript" id="GDScript_wtcfe"]
 resource_name = "Inimigo"
 script/source = "extends CharacterBody2D
-
-enum {
-	PATROL,
-	CHASING
-}
-@onready var coll: CollisionShape2D = $CollisionShape2D
-
 var vida = 3
 var dano = 1
 var speed = 150
-var dir = 1
+var dir = -1
 var player
-var estadoAtual = 0
-var distMax = 270
+
+func _ready() -> void:
+	player = get_parent().player
 
 
 func _process(delta: float) -> void:
 	if vida <= 0:
 		queue_free()
-	#print (\"Vida do corno: \",vida)
+	print (\"Vida do corno: \",vida)
 	
 func  _physics_process(delta: float) -> void:
-	match estadoAtual:
-		PATROL:
-			estado_patrulha(delta)
-		CHASING:
-			estado_seguir(delta)
-
-func estado_patrulha(delta) -> void:
-	#andar para direita
-	#quando colidir com a parede mudar direção
-	move(dir,66.7,delta)
-	if is_on_wall(): dir *= -1
-
-func estado_seguir(delta) -> void:
-	if global_position.x > player.global_position.x:
-		dir = -1
-	elif global_position.x < player.global_position.x:
-		dir = 1
-	if abs(global_position.x - player.global_position.x) >= distMax:
-		estadoAtual = 0
-		dir *= -1
-	#print(\"Distancia: \",abs(global_position.x - player.global_position.x))
-	move(dir,100,delta)
-
-func move(dir,vel,delta) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
-	velocity.x = vel * dir
+	velocity.x = speed * dir
 	move_and_slide()
-
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group(\"Player\"):
-		print(\"Player\")
-		player = body
-		estadoAtual = 1
+	if player != null :
+		if global_position.x > player.global_position.x:
+			dir = -1
+		elif global_position.x < player.global_position.x:
+			dir = 1
+		print(\"Nao Nulo\")
+	else:
+		print(\"Nulo\")
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0e48y"]
@@ -90,9 +62,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_e6d4v"]
-radius = 106.075
-
 [node name="Inimigo" type="CharacterBody2D" groups=["Inimigo"]]
 script = SubResource("GDScript_wtcfe")
 
@@ -104,10 +73,3 @@ shape = SubResource("RectangleShape2D_0e48y")
 sprite_frames = SubResource("SpriteFrames_ir8iy")
 autoplay = "default"
 frame_progress = 0.880966
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_e6d4v")
-
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
