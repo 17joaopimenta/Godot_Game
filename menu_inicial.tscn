@@ -1,0 +1,93 @@
+[gd_scene load_steps=3 format=3 uid="uid://blv8ewh0qck11"]
+
+[ext_resource type="Texture2D" uid="uid://duk0iecdnto4l" path="res://Assets/Previews/super-grotto.png" id="1_u4fxu"]
+
+[sub_resource type="GDScript" id="GDScript_u4fxu"]
+resource_name = "Menu"
+script/source = "extends Control
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed(\"ui_accept\"):
+			get_tree().change_scene_to_file(\"res://Cenas/node_2d.tscn\")
+
+
+
+func _on_button_pressed() -> void:
+	get_tree().change_scene_to_file(\"res://Cenas/Loja.tscn\")
+"
+
+[node name="Menu Inicial" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_u4fxu")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0823529, 0.0666667, 0.137255, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -520.0
+offset_top = -240.0
+offset_right = 520.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("1_u4fxu")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_top = 60.0
+offset_right = 71.0
+offset_bottom = 83.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 80
+text = "Aventuras no Acre"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -109.0
+offset_top = -52.0
+offset_right = -20.0
+offset_bottom = -29.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "@2025 João"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -53.0
+offset_right = 148.0
+offset_bottom = -10.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "Loja"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

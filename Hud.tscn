@@ -1,0 +1,81 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgt58tyvmk3a"]
+
+[ext_resource type="Script" uid="uid://dudx4uswn2ryi" path="res://hud.gd" id="1_6quqj"]
+[ext_resource type="Texture2D" uid="uid://c4jkxktlhsfhx" path="res://Assets/Characters/Player/sprites/Player-idle/player-idle1.png" id="2_5e3vm"]
+[ext_resource type="Texture2D" uid="uid://dgnerdcmfenlb" path="res://Assets/Props/Sprites/Battery/battery1.png" id="3_8hvrr"]
+[ext_resource type="Texture2D" uid="uid://d4m43b3sb85x1" path="res://Assets/Fx/Sprites/Pick Feedback 2/pick-feedback-2.png" id="4_jjwht"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="Hud" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6quqj")
+
+[node name="MarginContainer" type="MarginContainer" parent="Hud"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Hud/MarginContainer"]
+layout_mode = 2
+
+[node name="Vidas" type="HBoxContainer" parent="Hud/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Hud/MarginContainer/VBoxContainer/Vidas"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_5e3vm")
+stretch_mode = 5
+
+[node name="VidaTxt" type="Label" parent="Hud/MarginContainer/VBoxContainer/Vidas"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "X 3"
+
+[node name="Moedonas" type="HBoxContainer" parent="Hud/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Bateria" type="TextureRect" parent="Hud/MarginContainer/VBoxContainer/Moedonas"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_8hvrr")
+stretch_mode = 5
+
+[node name="Bateria2" type="TextureRect" parent="Hud/MarginContainer/VBoxContainer/Moedonas"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_8hvrr")
+stretch_mode = 5
+
+[node name="Bateria3" type="TextureRect" parent="Hud/MarginContainer/VBoxContainer/Moedonas"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_8hvrr")
+stretch_mode = 5
+
+[node name="Moedas" type="HBoxContainer" parent="Hud/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Hud/MarginContainer/VBoxContainer/Moedas"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("4_jjwht")
+stretch_mode = 5
+
+[node name="MoedaTxt" type="Label" parent="Hud/MarginContainer/VBoxContainer/Moedas"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "X 50"

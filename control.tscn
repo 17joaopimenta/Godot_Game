@@ -1,0 +1,440 @@
+[gd_scene load_steps=3 format=3 uid="uid://bhsnin5eleiva"]
+
+[ext_resource type="Texture2D" uid="uid://d4m43b3sb85x1" path="res://Assets/Fx/Sprites/Pick Feedback 2/pick-feedback-2.png" id="1_62e2m"]
+[ext_resource type="Texture2D" uid="uid://cnfbjts0u1412" path="res://Assets/Fx/Sprites/Explosion/explosion3.png" id="2_qtu10"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -0.454956
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Moedas" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Moedas"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("1_62e2m")
+stretch_mode = 5
+
+[node name="MoedaTxt" type="Label" parent="MarginContainer/Moedas"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "X 50"
+
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 31
+text = "Lojinha
+"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+custom_minimum_size = Vector2(0, -3.495)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer11" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer12" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer13" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer14" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer15" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer16" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer17" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer18" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer19" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer20" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer21" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer22" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="HBoxContainer23" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("2_qtu10")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+text = "Casca de Bala"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(500, 89.195)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 40.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "Custo do Item: "
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 107.0
+offset_bottom = 11.5
+grow_vertical = 2
+text = "Tiro Explosivo"
+
+[node name="Panel2" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2

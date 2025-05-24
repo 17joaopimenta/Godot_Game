@@ -1,0 +1,60 @@
+[gd_scene load_steps=10 format=3 uid="uid://c442wcht5yo62"]
+
+[ext_resource type="Script" uid="uid://7o64bxucikqs" path="res://Cenas/moeda.gd" id="1_eaojn"]
+[ext_resource type="Texture2D" uid="uid://d4m43b3sb85x1" path="res://Assets/Fx/Sprites/Pick Feedback 2/pick-feedback-2.png" id="1_m45tn"]
+[ext_resource type="Texture2D" uid="uid://r0kncmykola8" path="res://Assets/Fx/Sprites/Pick Feedback 2/pick-feedback-3.png" id="2_eaojn"]
+[ext_resource type="Texture2D" uid="uid://3yp1ktmvlsw0" path="res://Assets/Fx/Sprites/Pick Feedback 2/pick-feedback-4.png" id="3_qntt3"]
+[ext_resource type="Texture2D" uid="uid://c34q3oct13xbr" path="res://Assets/Fx/Sprites/Pick Feedback 2/pick-feedback-5.png" id="4_n303r"]
+[ext_resource type="Texture2D" uid="uid://c72ffdwkaaotw" path="res://Assets/Fx/Sprites/Pick Feedback 2/pick-feedback-6.png" id="5_f3h8t"]
+[ext_resource type="Texture2D" uid="uid://cnxkk11wrlln" path="res://Assets/Fx/Sprites/Pick Feedback 2/pick-feedback-7.png" id="6_7nicm"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1sxdy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_m45tn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_eaojn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_qntt3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_n303r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f3h8t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_7nicm")
+}],
+"loop": false,
+"name": &"Destroy",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_m45tn")
+}],
+"loop": true,
+"name": &"Normal",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m3rub"]
+radius = 8.06226
+
+[node name="Area2D" type="Area2D" groups=["Moedas"]]
+script = ExtResource("1_eaojn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1sxdy")
+animation = &"Normal"
+autoplay = "Normal"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_m3rub")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

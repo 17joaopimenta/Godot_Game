@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Godot Game"
-run/main_scene="uid://b40o7sq0vftwc"
+run/main_scene="uid://blv8ewh0qck11"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://Global.gd"
 
 [input]
 

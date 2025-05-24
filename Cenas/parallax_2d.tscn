@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://bivd22kw2t1id"]
+
+[ext_resource type="Texture2D" uid="uid://d2tegon63nh0o" path="res://Assets/Environment/Layers/back.png" id="1_ydge4"]
+
+[node name="Parallax2D" type="Parallax2D"]
+repeat_size = Vector2(456, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(229, 501)
+scale = Vector2(1.50417, 1.50417)
+texture = ExtResource("1_ydge4")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(1132, 501)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_ydge4")

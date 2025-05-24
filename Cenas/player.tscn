@@ -1,20 +1,17 @@
-[gd_scene load_steps=28 format=3 uid="uid://b40o7sq0vftwc"]
+[gd_scene load_steps=23 format=3 uid="uid://cwyd6cqlr1ynp"]
 
-[ext_resource type="Texture2D" uid="uid://duewehnmiovxv" path="res://Assets/Characters/Player/spritesheets/player-idle.png" id="1_0e48y"]
-[ext_resource type="Script" uid="uid://b2vaqst4oq8yj" path="res://Joojinho.gd" id="1_0h7mo"]
-[ext_resource type="Texture2D" uid="uid://duk0iecdnto4l" path="res://Assets/Previews/super-grotto.png" id="1_kdubu"]
-[ext_resource type="Texture2D" uid="uid://cncychxfwt3k2" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot1.png" id="3_d2bti"]
-[ext_resource type="Texture2D" uid="uid://6f6ehgbrglaf" path="res://Assets/Characters/Player/sprites/Player-jump/player-jump2.png" id="3_ta5nu"]
-[ext_resource type="Texture2D" uid="uid://djgf1ea4eh77f" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot2.png" id="4_ta5nu"]
-[ext_resource type="Texture2D" uid="uid://274wwcuq162" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot3.png" id="5_flf07"]
-[ext_resource type="Texture2D" uid="uid://hkvqjnihvcic" path="res://Assets/Characters/Player/sprites/player-run/player-run1.png" id="6_k73cj"]
-[ext_resource type="Texture2D" uid="uid://dd7q6apd671rd" path="res://Assets/Characters/Player/sprites/player-run/player-run2.png" id="7_rjqkl"]
-[ext_resource type="Texture2D" uid="uid://c1ft33kbqurbb" path="res://Assets/Characters/Player/sprites/Player-jump/player-jump1.png" id="8_flf07"]
-[ext_resource type="Texture2D" uid="uid://ck552xkqklkdk" path="res://Assets/Characters/Player/sprites/player-run/player-run3.png" id="8_fs4d3"]
-[ext_resource type="Texture2D" uid="uid://cgb0g8xllnt03" path="res://Assets/Characters/Player/sprites/player-run/player-run4.png" id="9_7vxoj"]
-[ext_resource type="Texture2D" uid="uid://dfekgidcx85xu" path="res://Assets/Characters/Player/sprites/player-run/player-run5.png" id="10_ei405"]
-[ext_resource type="Texture2D" uid="uid://g3ykuerdfm2u" path="res://Assets/Characters/Player/sprites/player-run/player-run6.png" id="11_e8dv2"]
-[ext_resource type="PackedScene" uid="uid://dwvknujoemmpp" path="res://Enemy.tscn" id="12_x0ka3"]
+[ext_resource type="Texture2D" uid="uid://6f6ehgbrglaf" path="res://Assets/Characters/Player/sprites/Player-jump/player-jump2.png" id="1_ruciq"]
+[ext_resource type="Texture2D" uid="uid://duewehnmiovxv" path="res://Assets/Characters/Player/spritesheets/player-idle.png" id="2_yk6xx"]
+[ext_resource type="Texture2D" uid="uid://c1ft33kbqurbb" path="res://Assets/Characters/Player/sprites/Player-jump/player-jump1.png" id="3_bb2x8"]
+[ext_resource type="Texture2D" uid="uid://cncychxfwt3k2" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot1.png" id="4_60xba"]
+[ext_resource type="Texture2D" uid="uid://djgf1ea4eh77f" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot2.png" id="5_2c22q"]
+[ext_resource type="Texture2D" uid="uid://274wwcuq162" path="res://Assets/Characters/Player/sprites/Player-shoot/player-shoot3.png" id="6_vlk8b"]
+[ext_resource type="Texture2D" uid="uid://hkvqjnihvcic" path="res://Assets/Characters/Player/sprites/player-run/player-run1.png" id="7_had87"]
+[ext_resource type="Texture2D" uid="uid://dd7q6apd671rd" path="res://Assets/Characters/Player/sprites/player-run/player-run2.png" id="8_axwfv"]
+[ext_resource type="Texture2D" uid="uid://ck552xkqklkdk" path="res://Assets/Characters/Player/sprites/player-run/player-run3.png" id="9_8tubf"]
+[ext_resource type="Texture2D" uid="uid://cgb0g8xllnt03" path="res://Assets/Characters/Player/sprites/player-run/player-run4.png" id="10_a4yfx"]
+[ext_resource type="Texture2D" uid="uid://dfekgidcx85xu" path="res://Assets/Characters/Player/sprites/player-run/player-run5.png" id="11_alogn"]
+[ext_resource type="Texture2D" uid="uid://g3ykuerdfm2u" path="res://Assets/Characters/Player/sprites/player-run/player-run6.png" id="12_4j5ex"]
 
 [sub_resource type="GDScript" id="GDScript_0e48y"]
 resource_name = "Player"
@@ -25,15 +22,16 @@ enum {
 	WALK,
 	JUMP,
 	FALL,
-	SHOOT
+	SHOOT,
+	HURT
 }
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
 
 const SPEED = 600.0
-const JUMP_VELOCITY = -500.0
+const JUMP_VELOCITY = -400.0
 
-@onready var bala = preload(\"res://Bullet.tscn\")
+@onready var bala = preload(\"res://Cenas/Bullet.tscn\")
 
 var balaDir = 1
 var atirando = false
@@ -47,8 +45,19 @@ var inicio_estado = false
 
 var ani_fim := false
 
+var moedas : int = 0
+var vidas := 3
+var baterias := 0
+var inimigo := false
+
+#func _ready() -> void:
+	
 func _physics_process(delta: float) -> void:
-	print(velocity.y)
+	if get_tile_data(\"fim\"):
+		get_tree().change_scene_to_packed(get_parent().next_level)
+	#if Input.is_action_just_pressed(\"ui_cancel\"):
+		#Global.pMoedas += 1
+		#print(Global.pMoedas)	
 	match estadoAtual:
 		IDLE:
 			estado_idle(delta)
@@ -60,6 +69,8 @@ func _physics_process(delta: float) -> void:
 			estado_fall(delta)
 		SHOOT:
 			estado_shoot(delta)
+		HURT:
+			estado_hurt(delta)
 	
 	#if not is_on_floor():
 		#velocity += get_gravity() * delta
@@ -82,11 +93,12 @@ func _physics_process(delta: float) -> void:
 #
 	#move_and_slide()
 
-
+	
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group(\"Inimigo\"):
-		get_tree().change_scene_to_file(\"res://derrota.tscn\")
+		inimigo = true
+		troca_estado(HURT)
 
 
 func _on_animated_sprite_2d_animation_finished() -> void:
@@ -101,17 +113,23 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 func estado_idle(delta):
 	anim.play(\"Idle\")
 	move(0,true,delta)
-	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+	if get_tile_data(\"dano\"):
+		troca_estado(HURT)
+	elif Input.is_action_just_pressed(\"tiro\") and !atirando:
 		troca_estado(SHOOT)
-	if direction != 0:
+	elif direction != 0:
 		troca_estado(WALK)
 	elif Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
 		troca_estado(JUMP)
+	elif !is_on_floor():
+		troca_estado(FALL)
 
 func estado_walk(delta):
 	anim.play(\"Walk\")
 	move(300,true,delta)
-	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+	if get_tile_data(\"dano\"):
+		troca_estado(HURT)
+	elif Input.is_action_just_pressed(\"tiro\") and !atirando:
 		troca_estado(SHOOT)
 	elif !direction:
 		troca_estado(IDLE)
@@ -121,18 +139,23 @@ func estado_walk(delta):
 func estado_jump(delta):
 	anim.play(\"Jump\")
 	move(300,true,delta)
-	if inicio_estado:
+	if get_tile_data(\"dano\"):
+		troca_estado(HURT)
+	elif inicio_estado:
 		velocity.y = JUMP_VELOCITY
 		inicio_estado = false
-	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+	elif Input.is_action_just_pressed(\"tiro\") and !atirando:
 		troca_estado(SHOOT)
 	elif velocity.y > 0 and !is_on_floor():
 		troca_estado(FALL)
-
+		print(\"Caindo!\")
+		
 func estado_fall(delta):
 	anim.play(\"Fall\")
 	move(300,true,delta)
-	if Input.is_action_just_pressed(\"tiro\") and !atirando:
+	if get_tile_data(\"dano\"):
+		troca_estado(HURT)
+	elif Input.is_action_just_pressed(\"tiro\") and !atirando:
 		troca_estado(SHOOT)
 	elif  is_on_floor():
 		if direction:
@@ -146,6 +169,8 @@ func estado_shoot(delta):
 		balaDir = 1 if anim.flip_h == false else -1
 		atirando = true
 		inicio_estado = false
+	if get_tile_data(\"dano\"):
+		troca_estado(HURT)
 	if ani_fim:
 		if !is_on_floor():
 			troca_estado(FALL)
@@ -155,6 +180,25 @@ func estado_shoot(delta):
 			troca_estado(WALK)
 		else:
 			troca_estado(IDLE)
+
+func estado_hurt(delta):
+	if inicio_estado:
+		vidas -= 1
+		velocity.y = -500
+		if vidas <= 0:
+			get_tree().change_scene_to_file(\"res://Cenas/derrota.tscn\")
+		inicio_estado = false
+	
+	var dir = 0	
+	if inimigo :
+		dir = -1 if anim.flip_h == false else 1
+	else:
+		dir = 1 if anim.flip_h == false else -1
+	velocity.x = dir * 200
+	velocity += get_gravity() * delta
+	move_and_slide()
+	if velocity.y > 0:
+		troca_estado(FALL)
 
 func troca_estado(novo_estado)->void:
 	if estadoAtual != novo_estado:
@@ -177,6 +221,20 @@ func move(vel,can_fall,delta):
 	elif direction < 0:
 		anim.flip_h = true	
 	move_and_slide()
+	
+
+func get_tile_data(name):
+	if get_tree() == null:
+		return
+	var tilemap: TileMapLayer = get_tree().get_first_node_in_group(\"Tilemap\")
+	if not tilemap:
+		return
+	var tile := tilemap.local_to_map($Marker2D.global_position)
+	var data : TileData = tilemap.get_cell_tile_data(tile)
+	
+	if data:
+		var info = data.get_custom_data(name)
+		return info
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_epypp"]
@@ -186,34 +244,34 @@ size = Vector2(17, 33)
 size = Vector2(23, 38)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_epypp"]
-atlas = ExtResource("1_0e48y")
+atlas = ExtResource("2_yk6xx")
 region = Rect2(0, 0, 32, 38)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0hol4"]
-atlas = ExtResource("1_0e48y")
+atlas = ExtResource("2_yk6xx")
 region = Rect2(32, 0, 32, 38)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q6r6c"]
-atlas = ExtResource("1_0e48y")
+atlas = ExtResource("2_yk6xx")
 region = Rect2(64, 0, 32, 38)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kdubu"]
-atlas = ExtResource("1_0e48y")
+atlas = ExtResource("2_yk6xx")
 region = Rect2(96, 0, 32, 38)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d21ai"]
-atlas = ExtResource("1_0e48y")
+atlas = ExtResource("2_yk6xx")
 region = Rect2(128, 0, 32, 38)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rj586"]
-atlas = ExtResource("1_0e48y")
+atlas = ExtResource("2_yk6xx")
 region = Rect2(160, 0, 32, 38)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4d7sh"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_ta5nu")
+"texture": ExtResource("1_ruciq")
 }],
 "loop": true,
 "name": &"Fall",
@@ -244,7 +302,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("8_flf07")
+"texture": ExtResource("3_bb2x8")
 }],
 "loop": true,
 "name": &"Jump",
@@ -252,98 +310,72 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_d2bti")
+"texture": ExtResource("4_60xba")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_ta5nu")
+"texture": ExtResource("5_2c22q")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_flf07")
+"texture": ExtResource("6_vlk8b")
 }],
 "loop": false,
 "name": &"Shoot",
-"speed": 8.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_k73cj")
+"texture": ExtResource("7_had87")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_rjqkl")
+"texture": ExtResource("8_axwfv")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_fs4d3")
+"texture": ExtResource("9_8tubf")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_7vxoj")
+"texture": ExtResource("10_a4yfx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("10_ei405")
+"texture": ExtResource("11_alogn")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_e8dv2")
+"texture": ExtResource("12_4j5ex")
 }],
 "loop": true,
 "name": &"Walk",
 "speed": 6.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wtcfe"]
-size = Vector2(1154, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d2bti"]
-size = Vector2(20, 182)
-
-[node name="Game" type="Node2D" node_paths=PackedStringArray("player")]
-script = ExtResource("1_0h7mo")
-player = NodePath("Player")
-
-[node name="Super-grotto" type="Sprite2D" parent="."]
-position = Vector2(520, 560)
-texture = ExtResource("1_kdubu")
-
-[node name="Player" type="CharacterBody2D" parent="." groups=["Player"]]
-position = Vector2(113, 569)
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
 script = SubResource("GDScript_0e48y")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 3.5)
 shape = SubResource("RectangleShape2D_epypp")
 
-[node name="Area2D" type="Area2D" parent="Player"]
+[node name="Area2D" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(-0.5, 3)
 shape = SubResource("RectangleShape2D_0hol4")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-2, 1)
 sprite_frames = SubResource("SpriteFrames_4d7sh")
-animation = &"Fall"
+animation = &"Shoot"
+frame = 2
+frame_progress = 1.0
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2.7, 2.7)
 limit_left = 0
-limit_top = 440
-limit_right = 1040
+limit_top = 415
+limit_right = 2215
 limit_bottom = 680
 editor_draw_limits = true
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(0, 32)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(579, 660)
-shape = SubResource("RectangleShape2D_wtcfe")
-
-[node name="Inimigo3" parent="." instance=ExtResource("12_x0ka3")]
-position = Vector2(391, 563)
-
-[node name="StaticBody2D3" type="StaticBody2D" parent="."]
-position = Vector2(11, 607)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
-position = Vector2(0, -50)
-shape = SubResource("RectangleShape2D_d2bti")
-
-[connection signal="body_entered" from="Player/Area2D" to="Player" method="_on_area_2d_body_entered"]
-[connection signal="animation_finished" from="Player/AnimatedSprite2D" to="Player" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
