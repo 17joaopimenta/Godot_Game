@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://dwvknujoemmpp"]
+[gd_scene load_steps=10 format=3 uid="uid://dwvknujoemmpp"]
 
 [ext_resource type="Texture2D" uid="uid://2xsce6b3bssv" path="res://Assets/Characters/Enemies/Crab/Sprites/Walk/crab-walk1.png" id="1_e6d4v"]
 [ext_resource type="Texture2D" uid="uid://yfduta6fwvl5" path="res://Assets/Characters/Enemies/Crab/Sprites/Walk/crab-walk2.png" id="2_qp131"]
 [ext_resource type="Texture2D" uid="uid://18xmgx8kxlfi" path="res://Assets/Characters/Enemies/Crab/Sprites/Walk/crab-walk3.png" id="3_6do27"]
 [ext_resource type="Texture2D" uid="uid://dlv0lh41ic4n5" path="res://Assets/Characters/Enemies/Crab/Sprites/Walk/crab-walk4.png" id="4_rvmyp"]
+[ext_resource type="PackedScene" uid="uid://crbi2a7keqgs3" path="res://knock_back.tscn" id="5_uggk2"]
 
 [sub_resource type="GDScript" id="GDScript_wtcfe"]
 resource_name = "Inimigo"
@@ -11,18 +12,29 @@ script/source = "extends CharacterBody2D
 
 enum {
 	PATROL,
-	CHASING
+	CHASING,
+	KNOCKBACK,
+	STUN
 }
 @onready var coll: CollisionShape2D = $CollisionShape2D
 
-var vida = 3
-var dano = 1
+var vida = 14
+var dano
 var speed := 100.0
 var dir = 1
-var player
 var estadoAtual = 0
 var distMax = 270
+var inicio_estado
+var vel
+var apply_knockback := false
+var apply_stun := false
 
+var time := 0.0
+var timeLimit := 2.0
+
+@export var player : CharacterBody2D
+@export var knockback : Node
+@onready var stun_timer: Timer = $StunTimer
 
 func _process(delta: float) -> void:
 	if vida <= 0:
@@ -30,19 +42,34 @@ func _process(delta: float) -> void:
 	#print (\"Vida do corno: \",vida)
 	
 func  _physics_process(delta: float) -> void:
+	
 	match estadoAtual:
 		PATROL:
 			estado_patrulha(delta)
 		CHASING:
 			estado_seguir(delta)
+		KNOCKBACK:
+			estado_knockback(delta)
+		STUN:
+			estado_stun(delta)
 
 func estado_patrulha(delta) -> void:
 	#andar para direita
 	#quando colidir com a parede mudar direção
-	move(dir,speed/2,delta)
+	if apply_knockback:
+		inicio_estado = true
+		estadoAtual = 2
+	if apply_stun:
+		estadoAtual = 3
 	if is_on_wall(): dir *= -1
+	move(dir,speed/2,delta)
 
 func estado_seguir(delta) -> void:
+	if apply_knockback:
+		inicio_estado = true
+		estadoAtual = 2
+	if apply_stun:
+		estadoAtual = 3
 	if global_position.x > player.global_position.x:
 		dir = -1
 	elif global_position.x < player.global_position.x:
@@ -60,10 +87,35 @@ func move(dir,vel,delta) -> void:
 	velocity.x = vel * dir
 	move_and_slide()
 
+func estado_knockback(delta):
+	if inicio_estado:
+		var dir_k = -1 if player.global_position.x > global_position.x else 1
+		velocity = Vector2(300 * dir_k,-500)
+		inicio_estado = false
+	else:
+		if not is_on_floor():
+			velocity += get_gravity() * delta
+		else:
+			apply_knockback = false
+			estadoAtual = 0
+	move_and_slide()
+
+func estado_stun(delta):
+	print(\"Parado\")
+	if apply_stun:
+		calculate_time()
+
+# Alternativa para o timer
+func calculate_time() -> void:
+	time += 0.01
+	if time > timeLimit:
+		apply_stun = false
+		time = 0
+		estadoAtual = 0
+
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group(\"Player\"):
 		print(\"Player\")
-		player = body
 		estadoAtual = 1
 "
 
@@ -93,8 +145,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_e6d4v"]
 radius = 106.075
 
-[node name="Inimigo" type="CharacterBody2D" groups=["Inimigo"]]
+[node name="Inimigo" type="CharacterBody2D" node_paths=PackedStringArray("knockback") groups=["Inimigo"]]
 script = SubResource("GDScript_wtcfe")
+knockback = NodePath("KnockBack")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 2.5)
@@ -109,5 +162,11 @@ frame_progress = 0.880966
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_e6d4v")
+
+[node name="KnockBack" parent="." instance=ExtResource("5_uggk2")]
+
+[node name="StunTimer" type="Timer" parent="."]
+wait_time = 0.477
+one_shot = true
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

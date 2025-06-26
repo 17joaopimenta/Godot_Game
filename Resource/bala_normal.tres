@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=7 format=3 uid="uid://byaktpd1s3wwl"]
+
+[ext_resource type="Script" uid="uid://cv1weme8lewa2" path="res://Resourse/weapon.gd" id="1_rnfk3"]
+[ext_resource type="Texture2D" uid="uid://cyx4tn2wwne26" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot1.png" id="2_vm6mg"]
+[ext_resource type="Texture2D" uid="uid://b5tcects3fbwo" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot2.png" id="3_doihy"]
+[ext_resource type="Texture2D" uid="uid://cxl044srxougw" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot3.png" id="4_16xek"]
+[ext_resource type="Texture2D" uid="uid://b2g2n7tcchu0h" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot4.png" id="5_vgl4k"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kkbfu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_vm6mg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_doihy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_16xek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_vgl4k")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[resource]
+script = ExtResource("1_rnfk3")
+nome = "Normal"
+dano = 1
+color = Color(1, 1, 1, 1)
+sprite = SubResource("SpriteFrames_kkbfu")
+portrait = ExtResource("3_doihy")
+preco = 0.0
+descricao = ""
+metadata/_custom_type_script = "uid://cv1weme8lewa2"

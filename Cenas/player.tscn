@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cwyd6cqlr1ynp"]
+[gd_scene load_steps=25 format=3 uid="uid://cwyd6cqlr1ynp"]
 
 [ext_resource type="Texture2D" uid="uid://6f6ehgbrglaf" path="res://Assets/Characters/Player/sprites/Player-jump/player-jump2.png" id="1_ruciq"]
 [ext_resource type="Texture2D" uid="uid://duewehnmiovxv" path="res://Assets/Characters/Player/spritesheets/player-idle.png" id="2_yk6xx"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://cgb0g8xllnt03" path="res://Assets/Characters/Player/sprites/player-run/player-run4.png" id="10_a4yfx"]
 [ext_resource type="Texture2D" uid="uid://dfekgidcx85xu" path="res://Assets/Characters/Player/sprites/player-run/player-run5.png" id="11_alogn"]
 [ext_resource type="Texture2D" uid="uid://g3ykuerdfm2u" path="res://Assets/Characters/Player/sprites/player-run/player-run6.png" id="12_4j5ex"]
+[ext_resource type="Script" uid="uid://qlgu23c42y46" path="res://Cenas/weapon_manager.gd" id="13_yk6xx"]
+[ext_resource type="Texture2D" uid="uid://b5tcects3fbwo" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot2.png" id="14_bb2x8"]
 
 [sub_resource type="GDScript" id="GDScript_0e48y"]
 resource_name = "Player"
@@ -26,7 +28,9 @@ enum {
 	HURT
 }
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
+@export_color_no_alpha var color_w
 
+var bala_r : Array[Weapon]
 
 const SPEED = 600.0
 const JUMP_VELOCITY = -400.0
@@ -48,12 +52,19 @@ var ani_fim := false
 var moedas : int = 0
 var vidas := 3
 var baterias := 0
-var inimigo := false
+var inimigo := false	
 
-#func _ready() -> void:
-	
+var tipo_bala
+var dano
+var sprite : SpriteFrames
+
+func _ready() -> void:
+	for i in bala_r:
+		print(i.nome)
+
 func _physics_process(delta: float) -> void:
 	if get_tile_data(\"fim\"):
+		Global.numero_level += 1
 		get_tree().change_scene_to_packed(get_parent().next_level)
 	#if Input.is_action_just_pressed(\"ui_cancel\"):
 		#Global.pMoedas += 1
@@ -107,6 +118,9 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		atirando = false
 		var tiro = bala.instantiate()
 		tiro.dir = balaDir
+		tiro.tipo = tipo_bala
+		tiro.dano = dano
+		tiro.sprite_bala = sprite
 		tiro.global_position = global_position
 		get_parent().add_child(tiro)
 		
@@ -222,6 +236,8 @@ func move(vel,can_fall,delta):
 		anim.flip_h = true	
 	move_and_slide()
 	
+func change_weapon():
+	pass
 
 func get_tile_data(name):
 	if get_tree() == null:
@@ -348,6 +364,8 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 script = SubResource("GDScript_0e48y")
+color_w = Color(0, 0, 0, 1)
+metadata/_edit_horizontal_guides_ = [-53.0]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 3.5)
@@ -377,5 +395,23 @@ editor_draw_limits = true
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(0, 32)
 
+[node name="WeaponManager" type="Node" parent="." node_paths=PackedStringArray("image_w")]
+script = ExtResource("13_yk6xx")
+debug_mode = true
+image_w = NodePath("../TextureRect")
+
+[node name="Timer" type="Timer" parent="WeaponManager"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -11.0
+offset_top = -34.0
+offset_right = 9.0
+offset_bottom = -14.0
+size_flags_horizontal = 0
+texture = ExtResource("14_bb2x8")
+expand_mode = 1
+stretch_mode = 5
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="timeout" from="WeaponManager/Timer" to="WeaponManager" method="_on_timer_timeout"]

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=5 format=3 uid="uid://dwfghp4ht7hw4"]
+
+[ext_resource type="Script" uid="uid://cv1weme8lewa2" path="res://Resourse/weapon.gd" id="1_crath"]
+[ext_resource type="Texture2D" uid="uid://cu3r3qig6bgd8" path="res://MySprites/lisbon-portugal-neymar-of-paris-saint-germain-smiles-after-the-uefa-champions-league-quarter.webp" id="1_vuys6"]
+[ext_resource type="Texture2D" uid="uid://bvq1ju2pc2itp" path="res://MySprites/WhatsApp Image 2025-06-15 at 15.25.39_905b50a1 (1).png" id="3_6fd2f"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1tfyh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_6fd2f")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[resource]
+script = ExtResource("1_crath")
+nome = "Neymar"
+dano = 7
+color = Color(0.290196, 0.713726, 0, 1)
+sprite = SubResource("SpriteFrames_1tfyh")
+portrait = ExtResource("1_vuys6")
+preco = 40.0
+descricao = "Uma explosao sinistra que faz seus adversarios tropessarem e faz eles perderem 7 de vida"
+tipo = 2
+metadata/_custom_type_script = "uid://cv1weme8lewa2"

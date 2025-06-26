@@ -1,32 +1,122 @@
-[gd_scene load_steps=8 format=3 uid="uid://d4jo0q6646f8p"]
+[gd_scene load_steps=17 format=3 uid="uid://d4jo0q6646f8p"]
 
 [ext_resource type="Texture2D" uid="uid://cyx4tn2wwne26" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot1.png" id="1_rmm2a"]
+[ext_resource type="Texture2D" uid="uid://bukxyi0ncwvfi" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion2.png" id="2_4ip3q"]
 [ext_resource type="Texture2D" uid="uid://b5tcects3fbwo" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot2.png" id="2_qdhon"]
+[ext_resource type="Texture2D" uid="uid://7bdpsi4wgnij" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion3.png" id="3_4mv16"]
 [ext_resource type="Texture2D" uid="uid://cxl044srxougw" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot3.png" id="3_y7w40"]
 [ext_resource type="Texture2D" uid="uid://b2g2n7tcchu0h" path="res://Assets/Fx/Sprites/Player-Shoot/player-shoot4.png" id="4_6n6c1"]
+[ext_resource type="Texture2D" uid="uid://de7wgv6yonche" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion4.png" id="4_d5nog"]
+[ext_resource type="Texture2D" uid="uid://bd5j4y04nv5di" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion5.png" id="5_b363h"]
+[ext_resource type="Texture2D" uid="uid://butolf6pj6xy8" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion6.png" id="6_bcedd"]
+[ext_resource type="Texture2D" uid="uid://bntxsb8nb3aet" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion7.png" id="7_s35qs"]
+[ext_resource type="Texture2D" uid="uid://clbtey3bh2xbq" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion8.png" id="8_imu3h"]
+[ext_resource type="Texture2D" uid="uid://bwkseuye81v74" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion9.png" id="9_gwi3y"]
 
 [sub_resource type="GDScript" id="GDScript_4s4u5"]
 script/source = "extends Area2D
 var vel = 800
 var dir = 1
-var dano = 2
+var dano
+var tipo
+var sprite_bala : SpriteFrames
+
+func _ready() -> void:
+	$AnimatedSprite2D.sprite_frames = sprite_bala
 
 # _physics_process : fixedupdate
 func _physics_process(delta: float) -> void:
-		position.x += vel * delta * dir
-		if dir > 0:
-			$AnimatedSprite2D.flip_h = false
-		elif dir < 0:
-			$AnimatedSprite2D.flip_h = true
+		move(tipo,delta)
 
 func _on_body_entered(body: Node2D) -> void:
+	match tipo:
+		0:
+			if body.is_in_group(\"Inimigo\") or body.is_in_group(\"Blocos\"):
+				body.vida -= dano
+				queue_free()
+		1:
+			if body.is_in_group(\"Inimigo\") or body.is_in_group(\"Blocos\"):
+				$AnimatedSprite2D.play(\"Explosion\")
+				$Explosion.monitoring = true
+				tipo = -1
+				$CollisionShape2D.disabled = true	
+		2:
+			if body.is_in_group(\"Inimigo\"):
+				body.vida -= dano	
+				body.apply_stun = true
+				print(\"Colidiu\")
+			elif body.is_in_group(\"Blocos\"):
+				body.vida -= dano
+			queue_free()
+
+func move(tipo,delta):
+	match tipo:
+		-1:
+			pass
+		0:
+			position.x += vel * delta * dir
+			if dir > 0:
+				$AnimatedSprite2D.flip_h = false
+			elif dir < 0:
+				$AnimatedSprite2D.flip_h = true
+		1:
+			position.x += vel/2 * delta * dir
+			position.y += vel/10 * delta
+			if dir > 0:
+				$AnimatedSprite2D.flip_h = false
+			elif dir < 0:
+				$AnimatedSprite2D.flip_h = true
+		2:
+			position.x += vel * delta * dir
+			#position.y += (vel*vel)*2 + vel*3
+			if dir > 0:
+				$AnimatedSprite2D.flip_h = false
+			elif dir < 0:
+				$AnimatedSprite2D.flip_h = true
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group(\"Inimigo\") or body.is_in_group(\"Blocos\"):
-		body.vida -= dano
-		queue_free()
+		#body.vida -= dano*2
+		if body.knockback:
+			body.knockback.knock_back()
+
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	queue_free()
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_a8g78"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_4ip3q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_4mv16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_d5nog")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_b363h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_bcedd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_s35qs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_imu3h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_gwi3y")
+}],
+"loop": false,
+"name": &"Explosion",
+"speed": 8.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_rmm2a")
@@ -49,15 +139,27 @@ animations = [{
 radius = 4.0
 height = 10.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_rmm2a"]
+radius = 25.02
+
 [node name="Area2D" type="Area2D"]
 script = SubResource("GDScript_4s4u5")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_a8g78")
-frame_progress = 0.172708
+animation = &"Explosion"
+autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_fd626")
 
+[node name="Explosion" type="Area2D" parent="."]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Explosion"]
+shape = SubResource("CircleShape2D_rmm2a")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="Explosion" to="." method="_on_area_2d_body_entered"]

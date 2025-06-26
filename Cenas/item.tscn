@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://fd0h7b26xsrn"]
+
+[ext_resource type="Script" uid="uid://vl4jrfnki26q" path="res://ItensLoja.gd" id="1_xruxt"]
+[ext_resource type="Texture2D" uid="uid://7bdpsi4wgnij" path="res://Assets/Fx/Sprites/Big-Explosion/big-explosion3.png" id="2_6f8qp"]
+
+[node name="Button" type="Button" node_paths=PackedStringArray("photo", "nameItem")]
+custom_minimum_size = Vector2(83, 95.435)
+offset_right = 83.0
+offset_bottom = 8.0
+script = ExtResource("1_xruxt")
+photo = NodePath("PanelContainer/Item 1/Foto1")
+nameItem = NodePath("PanelContainer/Item 1/Nome1")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 83.0
+offset_bottom = 96.0
+mouse_filter = 2
+
+[node name="Item 1" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 2
+
+[node name="Foto1" type="TextureRect" parent="PanelContainer/Item 1"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_6f8qp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Nome1" type="Label" parent="PanelContainer/Item 1"]
+layout_mode = 2
+text = "Neymar Jr."
+horizontal_alignment = 1
